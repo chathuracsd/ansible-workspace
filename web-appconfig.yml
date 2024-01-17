@@ -1,0 +1,22 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+  - name: copy vhost.conf file to webservers 
+    copy:
+      src: /home/ansible-dir/webapp/vhost.conf
+      dest: /etc/apache2/sites-available/vhost.conf
+    become: yes
+
+  - name: copy index.html file to webservers
+    copy:
+      src: /home/ansible-dir/webapp/index.html
+      dest: /var/www/html/index.html
+    become: yes
+
+  - name: restart apache service
+    service:
+      name: apache2
+      state: restarted
+    become: yes

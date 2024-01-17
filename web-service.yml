@@ -1,0 +1,53 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update debian repository
+    apt:
+      update_cache: yes
+    become: yes
+
+  - name: install apache service
+    apt:
+      name: apache2
+      state: latest
+    become: yes
+
+  - name: enable apache service
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+    become: yes
+  - name: restart apache service
+    service:
+      name: apache2
+      state: restarted
+    become: yes
+  
+  - name: install firewalld service
+    apt:
+      name: firewalld
+      state: present
+    become: yes  
+
+  - name: enable firewalld service
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+    become: yes
+  
+  - name: restart firewalld service
+    service:
+      name: firewalld
+      state: restarted
+    become: yes
+
+  - name: allow port 80
+    shell: >
+        firewall-cmd --permanent --add-port=80/tcp &&
+        firewall-cmd --reload
+    become: yes
